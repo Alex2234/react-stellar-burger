@@ -1,9 +1,21 @@
-.section {
-    
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .constructorElement {
-    display: flex;
-    align-items: center;
-    
+  display: flex;
+  align-items: center;
+}
+
+.icon_inactive {
+  opacity: 0;
+  overflow: hidden;
+}
+
+.order {
+  display: flex;
+  align-items: center;
+  justify-content: right;
 }
