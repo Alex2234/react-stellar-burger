@@ -1,0 +1,22 @@
+.header {
+    width: 1280px;
+    margin: 0 auto;
+    
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav {
+    display: flex;
+}
+
+.link {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    color: inherit;
+}

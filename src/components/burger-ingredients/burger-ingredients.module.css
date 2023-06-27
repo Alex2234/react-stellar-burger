@@ -1,0 +1,33 @@
+.section {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+
+.ingredient {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    
+.prices {
+    display: flex;
+    align-items: center;
+}
+
+
+.container {
+    height: 600px;
+    overflow-y: scroll;
+}
+
+.name {
+    max-width: 272px;
+    text-align: center;
+}
