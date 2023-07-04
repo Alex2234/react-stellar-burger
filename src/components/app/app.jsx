@@ -1,10 +1,27 @@
+import React from "react";
 import styles from "./app.module.css";
-import { data } from "../../utils/data";
+import url from "../../utils/constants";
 import AppHeader from "../header/header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 
-function App() {
+const App = () => {
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = () => {
+      fetch(url)
+        .then((res) => {
+          return res.json();
+        })
+        .then(({ data }) => setData(data))
+        .catch((err) => {
+          return console.log("Ошибка. Запрос не выполнен: ", err);
+        });
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -14,6 +31,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;
