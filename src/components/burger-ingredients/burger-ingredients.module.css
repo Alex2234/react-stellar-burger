@@ -35,3 +35,16 @@
   max-width: 272px;
   text-align: center;
 }
+
+.counter {
+  visibility:hidden;
+  opacity:0;
+  overflow-y: hidden;
+  transition:visibility 0s linear 0.5s,opacity 0.5s linear;
+}
+
+.counter_active {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}

@@ -9,21 +9,30 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-detail";
+import IngredientsContext from "../../services/ingredientsContext";
+import SelectedIngredientsContext from "../../services/selectedIngredientsContext";
 
-const BurgerIngredients = ({ data }) => {
-  const buns = data.filter((item) => item.type === "bun");
-  const mains = data.filter((item) => item.type === "main");
-  const sauces = data.filter((item) => item.type === "sauce");
+const BurgerIngredients = () => {
+  const ingredients = React.useContext(IngredientsContext);
+  const { addIngredient } = React.useContext(SelectedIngredientsContext);
+
+  const buns = ingredients.filter((item) => item.type === "bun");
+  const mains = ingredients.filter((item) => item.type === "main");
+  const sauces = ingredients.filter((item) => item.type === "sauce");
 
   const [current, setCurrent] = React.useState("buns");
 
   const [modalOpen, setModalOpen] = React.useState(false);
-
   const [selectedIngredient, setSelectedIngredient] = React.useState();
 
   const openModal = (ingredient) => {
     setSelectedIngredient(ingredient);
     setModalOpen(true);
+  };
+
+  const addIngredients = (ingredient) => {
+    setSelectedIngredient(ingredient);
+    addIngredient(ingredient);
   };
 
   const closeModal = () => {
@@ -49,17 +58,21 @@ const BurgerIngredients = ({ data }) => {
           <h3 className="text text_type_main-medium pt-10 pb-6">Булки</h3>
           <div className={`${styles.ingredients} pl-4`}>
             {buns.map((item) => (
-              <div
-                key={item._id}
-                className={`${styles.ingredient} pb-8`}
-                onClick={() => openModal(item)}>
+              <div key={item._id} className={`${styles.ingredient} pb-8`}>
                 <Counter count={1} size="default" extraClass="m-1" />
-                <img src={item.image} alt={item.name} className="pl-4" />
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="pl-4"
+                  onClick={() => addIngredients(item)}
+                />
                 <div className={`${styles.prices} pt-1 pb-1`}>
                   <p className="text text_type_digits-default">{item.price}</p>
                   <CurrencyIcon />
                 </div>
-                <p className={`${styles.name} text text_type_main-default`}>
+                <p
+                  className={`${styles.name} text text_type_main-default`}
+                  onClick={() => openModal(item)}>
                   {item.name}
                 </p>
               </div>
@@ -70,17 +83,21 @@ const BurgerIngredients = ({ data }) => {
           <h3 className="text text_type_main-medium pt-10 pb-6">Соусы</h3>
           <div className={`${styles.ingredients} pl-4`}>
             {sauces.map((item) => (
-              <div
-                key={item._id}
-                className={`${styles.ingredient} pb-8`}
-                onClick={() => openModal(item)}>
+              <div key={item._id} className={`${styles.ingredient} pb-8`}>
                 <Counter count={1} size="default" extraClass="m-1" />
-                <img src={item.image} alt={item.name} className="pl-4" />
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="pl-4"
+                  onClick={() => addIngredients(item)}
+                />
                 <div className={`${styles.prices} pt-1 pb-1`}>
                   <p className="text text_type_digits-default">{item.price}</p>
                   <CurrencyIcon />
                 </div>
-                <p className={`${styles.name} text text_type_main-default`}>
+                <p
+                  className={`${styles.name} text text_type_main-default`}
+                  onClick={() => openModal(item)}>
                   {item.name}
                 </p>
               </div>
@@ -89,17 +106,21 @@ const BurgerIngredients = ({ data }) => {
           <h3 className="text text_type_main-medium pt-10 pb-6">Ингридиенты</h3>
           <div className={`${styles.ingredients} pl-4`}>
             {mains.map((item) => (
-              <div
-                key={item._id}
-                className={`${styles.ingredient} pb-8`}
-                onClick={() => openModal(item)}>
+              <div key={item._id} className={`${styles.ingredient} pb-8`}>
                 <Counter count={1} size="default" extraClass="m-1" />
-                <img src={item.image} alt={item.name} className="pl-4" />
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="pl-4"
+                  onClick={() => addIngredients(item)}
+                />
                 <div className={`${styles.prices} pt-1 pb-1`}>
                   <p className="text text_type_digits-default">{item.price}</p>
                   <CurrencyIcon />
                 </div>
-                <p className={`${styles.name} text text_type_main-default`}>
+                <p
+                  className={`${styles.name} text text_type_main-default`}
+                  onClick={() => openModal(item)}>
                   {item.name}
                 </p>
               </div>
@@ -117,8 +138,8 @@ const BurgerIngredients = ({ data }) => {
   );
 };
 
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(IngredientType).isRequired,
-};
+// BurgerIngredients.propTypes = {
+//   ingredients: PropTypes.arrayOf(IngredientType).isRequired,
+// };
 
 export default BurgerIngredients;
