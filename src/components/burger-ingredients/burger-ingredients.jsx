@@ -1,6 +1,4 @@
 import React from "react";
-import IngredientType from "../../utils/prop-types";
-import PropTypes from "prop-types";
 import styles from "../../components/burger-ingredients/burger-ingredients.module.css";
 import {
   Counter,

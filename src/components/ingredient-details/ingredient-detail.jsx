@@ -1,6 +1,5 @@
 import React from "react";
 import IngredientType from "../../utils/prop-types";
-import PropTypes from "prop-types";
 import styles from "./ingredient-detail.module.css";
 
 const IngredientDetails = ({ ingredient }) => {
