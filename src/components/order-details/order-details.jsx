@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./order-details.module.css";
 import checkBox from "../../images/graphics.svg";
 
@@ -16,6 +17,10 @@ const OrderDetails = ({ orderId }) => {
       </span>
     </div>
   );
+};
+
+OrderDetails.propTypes = {
+  orderId: PropTypes.number,
 };
 
 export default OrderDetails;

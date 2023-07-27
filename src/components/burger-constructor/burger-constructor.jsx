@@ -16,25 +16,24 @@ import { postOrder } from "../../utils/burger-api";
 const BurgerConstructor = () => {
   const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
 
-  const bun = selectedIngredients.filter((item) => item.type === "bun");
+  const bun = selectedIngredients.find((item) => item.type === "bun");
   const ingredients = selectedIngredients.filter(
     (item) => item.type === "main" || item.type === "sauce"
   );
 
-  const [sumOrder, setSumOrder] = React.useState(0);
-  const [orderId, setOrderId] = React.useState("");
+  const [orderId, setOrderId] = React.useState();
 
-  React.useEffect(() => {
+  const sumOrder = React.useMemo(() => {
     let total = 0;
     ingredients.forEach((ingredient) => {
       total += ingredient.price;
     });
 
-    if (bun.length > 0) {
-      total += bun[0].price * 2;
+    if (bun) {
+      total += bun.price * 2;
     }
 
-    setSumOrder(total);
+    return total;
   }, [ingredients, bun]);
 
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -50,7 +49,7 @@ const BurgerConstructor = () => {
   return (
     <section className={`${styles.section} pl-10`}>
       <div className={`${styles.wrapper} pt-25 pb-10`}>
-        {bun.length !== 0 && (
+        {bun && (
           <div className={styles.constructorElement}>
             <div className={styles.icon_inactive}>
               <DragIcon type="primary" />
@@ -58,9 +57,9 @@ const BurgerConstructor = () => {
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={`${bun[0].name} верх`}
-              price={bun[0].price}
-              thumbnail={bun[0].image}
+              text={`${bun.name} верх`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
@@ -80,7 +79,7 @@ const BurgerConstructor = () => {
             ))}
           </div>
         </div>
-        {bun.length !== 0 && (
+        {bun && (
           <div className={styles.constructorElement}>
             <div className={styles.icon_inactive}>
               <DragIcon type="primary" />
@@ -88,9 +87,9 @@ const BurgerConstructor = () => {
             <ConstructorElement
               type="bottom"
               isLocked={true}
-              text={`${bun[0].name} низ`}
-              price={bun[0].price}
-              thumbnail={bun[0].image}
+              text={`${bun.name} низ`}
+              price={bun.price}
+              thumbnail={bun.image}
             />
           </div>
         )}
@@ -121,9 +120,5 @@ const BurgerConstructor = () => {
     </section>
   );
 };
-
-// BurgerConstructor.propTypes = {
-//   selectedIngredients: PropTypes.arrayOf(IngredientType).isRequired,
-// };
 
 export default BurgerConstructor;

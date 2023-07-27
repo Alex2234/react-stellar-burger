@@ -54,9 +54,8 @@ const BurgerIngredients = () => {
         </Tab>
       </div>
       <div className={`${styles.container} custom-scroll`}>
-        <div>
           <h3 className="text text_type_main-medium pt-10 pb-6">Булки</h3>
-          <div className={`${styles.ingredients} pl-4`}>
+          <div className={`${styles.ingredients} pl-4 pr-4`}>
             {buns.map((item) => (
               <div key={item._id} className={`${styles.ingredient} pb-8`}>
                 <Counter count={1} size="default" extraClass="m-1" />
@@ -78,10 +77,8 @@ const BurgerIngredients = () => {
               </div>
             ))}
           </div>
-        </div>
-        <div>
           <h3 className="text text_type_main-medium pt-10 pb-6">Соусы</h3>
-          <div className={`${styles.ingredients} pl-4`}>
+          <div className={`${styles.ingredients} pl-4 pr-4`}>
             {sauces.map((item) => (
               <div key={item._id} className={`${styles.ingredient} pb-8`}>
                 <Counter count={1} size="default" extraClass="m-1" />
@@ -104,7 +101,7 @@ const BurgerIngredients = () => {
             ))}
           </div>
           <h3 className="text text_type_main-medium pt-10 pb-6">Ингридиенты</h3>
-          <div className={`${styles.ingredients} pl-4`}>
+          <div className={`${styles.ingredients} pl-4 pr-4`}>
             {mains.map((item) => (
               <div key={item._id} className={`${styles.ingredient} pb-8`}>
                 <Counter count={1} size="default" extraClass="m-1" />
@@ -126,7 +123,6 @@ const BurgerIngredients = () => {
               </div>
             ))}
           </div>
-        </div>
       </div>
       <Modal
         title="Детали ингредиента"
@@ -137,9 +133,5 @@ const BurgerIngredients = () => {
     </section>
   );
 };
-
-// BurgerIngredients.propTypes = {
-//   ingredients: PropTypes.arrayOf(IngredientType).isRequired,
-// };
 
 export default BurgerIngredients;

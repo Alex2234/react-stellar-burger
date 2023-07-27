@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import styles from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
@@ -34,6 +35,13 @@ const Modal = (props) => {
     </div>,
     document.getElementById("modals")
   );
+};
+
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default Modal;
