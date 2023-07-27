@@ -1,14 +1,7 @@
-.wrapper {
-  display: flex;
-  margin: auto;
-}
-
 .app {
   display: flex;
   flex-direction: column;
   height: 100vh;
   background-color: #131316;
   color: #f2f2f3;
-  position: relative;
-  z-index: 2;
 }
