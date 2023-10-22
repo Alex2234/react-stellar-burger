@@ -1,29 +1,38 @@
-import React from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import styles from "../../components/burger-constructor/burger-constructor.module.css";
 import {
-  ConstructorElement,
-  DragIcon,
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import Bun from "./bun-constructor/bunConstructor";
+import DragIngredient from "./dragIngredient-constructor/dragIngredientConstructor";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import SelectedIngredientsContext from "../../services/selectedIngredientsContext";
-import { postOrder } from "../../utils/burger-api";
+import { postOrder } from "../../services/actions/order";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  deleteIngredient,
+  addIngredient,
+} from "../../services/actions/burgerConstructor";
+import { useDrop } from "react-dnd";
+import update from "immutability-helper";
 
 const BurgerConstructor = () => {
-  const { selectedIngredients } = React.useContext(SelectedIngredientsContext);
+  const dispatch = useDispatch();
 
-  const bun = selectedIngredients.find((item) => item.type === "bun");
-  const ingredients = selectedIngredients.filter(
-    (item) => item.type === "main" || item.type === "sauce"
-  );
+  const { selectIngredients, bun, orderId } = useSelector((state) => ({
+    bun: state.burgerConstructor.bun,
+    selectIngredients: state.burgerConstructor.selectIngredients,
+    orderId: state.order.orderId,
+  }));
 
-  const [orderId, setOrderId] = React.useState();
+  const orderBurger = useMemo(() => {
+    return [...selectIngredients, bun];
+  }, [selectIngredients, bun]);
 
-  const sumOrder = React.useMemo(() => {
+  const sumOrder = useMemo(() => {
     let total = 0;
-    ingredients.forEach((ingredient) => {
+    selectIngredients.forEach((ingredient) => {
       total += ingredient.price;
     });
 
@@ -32,65 +41,64 @@ const BurgerConstructor = () => {
     }
 
     return total;
-  }, [ingredients, bun]);
+  }, [selectIngredients, bun]);
 
-  const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = (ingredients) => {
     setModalOpen(true);
+    dispatch(postOrder(ingredients));
   };
 
   const closeModal = () => {
     setModalOpen(false);
   };
 
+  const [, dropConstructor] = useDrop(() => ({
+    accept: "ingredient",
+    drop: (item) => dispatch(addIngredient(item)),
+  }));
+
+  const [moveIngredients, setMoveIngredients] = useState([]);
+
+  useEffect(() => {
+    setMoveIngredients(selectIngredients);
+  }, [selectIngredients]);
+
+  const moveIngredient = useCallback((dragIndex, hoverIndex) => {
+    setMoveIngredients((prevCards) =>
+      update(prevCards, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prevCards[dragIndex]],
+        ],
+      })
+    );
+  }, []);
+
+  const renderDragIngredient = useCallback((ingredient, index) => {
+    return (
+      <DragIngredient
+        key={ingredient.key}
+        id={ingredient.key}
+        ingredient={ingredient}
+        index={index}
+        moveIngredient={moveIngredient}
+        deleteIngredient={() => dispatch(deleteIngredient(ingredient.key))}
+      />
+    );
+  }, []);
+
   return (
     <section className={`${styles.section} pl-10`}>
-      <div className={`${styles.wrapper} pt-25 pb-10`}>
-        {bun && (
-          <div className={styles.constructorElement}>
-            <div className={styles.icon_inactive}>
-              <DragIcon type="primary" />
-            </div>
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={`${bun.name} верх`}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
-          </div>
-        )}
-        <div className={`${styles.scroll} custom-scroll`}>
-          <div className={styles.wrapper}>
-            {ingredients.map((item, index) => (
-              <div key={index} className={styles.constructorElement}>
-                <div>
-                  <DragIcon type="primary" />
-                </div>
-                <ConstructorElement
-                  text={item.name}
-                  price={item.price}
-                  thumbnail={item.image}
-                />
-              </div>
-            ))}
-          </div>
+      <div ref={dropConstructor} className={`${styles.wrapper} pt-25 pb-10`}>
+        {bun && <Bun bun={bun} type="top" />}
+        <div className={`${styles.scroll} custom-scroll ${styles.wrapper}`}>
+          {moveIngredients.map((ingredient, index) =>
+            renderDragIngredient(ingredient, index)
+          )}
         </div>
-        {bun && (
-          <div className={styles.constructorElement}>
-            <div className={styles.icon_inactive}>
-              <DragIcon type="primary" />
-            </div>
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={`${bun.name} низ`}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
-          </div>
-        )}
+        {bun && <Bun bun={bun} type="bottom" />}
       </div>
       <div className={styles.order}>
         <p className="text text_type_digits-medium pr-2">{sumOrder}</p>
@@ -100,14 +108,7 @@ const BurgerConstructor = () => {
             htmlType="button"
             type="primary"
             size="large"
-            onClick={() => {
-              postOrder(
-                selectedIngredients.map((ingredient) => ingredient._id)
-              ).then((data) => {
-                setOrderId(data.order.number);
-                openModal();
-              });
-            }}>
+            onClick={() => openModal(orderBurger)}>
             Оформить заказ
           </Button>
         </div>

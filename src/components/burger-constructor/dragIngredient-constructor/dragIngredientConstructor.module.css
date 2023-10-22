@@ -1,0 +1,5 @@
+.dragIngredient {
+    display: flex;
+    align-items: center;
+    cursor: move;
+  }
