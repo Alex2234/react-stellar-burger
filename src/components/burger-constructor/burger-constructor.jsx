@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import styles from "../../components/burger-constructor/burger-constructor.module.css";
 import {
   Button,
@@ -10,6 +10,7 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { postOrder } from "../../services/actions/order";
 import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
 import {
   deleteIngredient,
   addIngredient,
@@ -20,19 +21,35 @@ import update from "immutability-helper";
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
-  const { selectIngredients, bun, orderId } = useSelector((state) => ({
-    bun: state.burgerConstructor.bun,
-    selectIngredients: state.burgerConstructor.selectIngredients,
-    orderId: state.order.orderId,
-  }));
+  const getBurgerConstructorState = (state) => state.burgerConstructor;
+  const getOrderState = (state) => state.order;
+
+  const selectBun = createSelector(
+    [getBurgerConstructorState],
+    (burgerConstructor) => burgerConstructor.bun
+  );
+
+  const selectSelectedIngredients = createSelector(
+    [getBurgerConstructorState],
+    (burgerConstructor) => burgerConstructor.selectIngredients
+  );
+
+  const selectOrderId = createSelector(
+    [getOrderState],
+    (order) => order.orderId
+  );
+
+  const bun = useSelector(selectBun);
+  const selectedIngredients = useSelector(selectSelectedIngredients);
+  const orderId = useSelector(selectOrderId);
 
   const orderBurger = useMemo(() => {
-    return [...selectIngredients, bun];
-  }, [selectIngredients, bun]);
+    return [...selectedIngredients, bun];
+  }, [selectedIngredients, bun]);
 
   const sumOrder = useMemo(() => {
     let total = 0;
-    selectIngredients.forEach((ingredient) => {
+    selectedIngredients.forEach((ingredient) => {
       total += ingredient.price;
     });
 
@@ -41,7 +58,7 @@ const BurgerConstructor = () => {
     }
 
     return total;
-  }, [selectIngredients, bun]);
+  }, [selectedIngredients, bun]);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -62,8 +79,8 @@ const BurgerConstructor = () => {
   const [moveIngredients, setMoveIngredients] = useState([]);
 
   useEffect(() => {
-    setMoveIngredients(selectIngredients);
-  }, [selectIngredients]);
+    setMoveIngredients(selectedIngredients);
+  }, [selectedIngredients]);
 
   const moveIngredient = useCallback((dragIndex, hoverIndex) => {
     setMoveIngredients((prevCards) =>
@@ -76,8 +93,8 @@ const BurgerConstructor = () => {
     );
   }, []);
 
-  const renderDragIngredient = useCallback((ingredient, index) => {
-    return (
+  const renderDragIngredient = useMemo(() => {
+    return moveIngredients.map((ingredient, index) => (
       <DragIngredient
         key={ingredient.key}
         id={ingredient.key}
@@ -86,17 +103,15 @@ const BurgerConstructor = () => {
         moveIngredient={moveIngredient}
         deleteIngredient={() => dispatch(deleteIngredient(ingredient.key))}
       />
-    );
-  }, []);
+    ));
+  }, [moveIngredients, moveIngredient, dispatch]);
 
   return (
     <section className={`${styles.section} pl-10`}>
       <div ref={dropConstructor} className={`${styles.wrapper} pt-25 pb-10`}>
         {bun && <Bun bun={bun} type="top" />}
         <div className={`${styles.scroll} custom-scroll ${styles.wrapper}`}>
-          {moveIngredients.map((ingredient, index) =>
-            renderDragIngredient(ingredient, index)
-          )}
+          {renderDragIngredient}
         </div>
         {bun && <Bun bun={bun} type="bottom" />}
       </div>

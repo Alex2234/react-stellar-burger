@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "./ingredient/ingredient";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-detail";
 import { getIngredients } from "../../services/actions/ingredients";
-import { v4 as uuidv4 } from "uuid";
+import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getIngredientDetail,
@@ -19,27 +19,42 @@ const BurgerIngredients = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const { ingredients, ingredientDetail, bun, selectIngredients } = useSelector(
-    (state) => ({
-      ingredients: state.ingredients.ingredients,
-      ingredientDetail: state.ingredientDetail.ingredientDetail,
-      bun: state.burgerConstructor.bun,
-      selectIngredients: state.burgerConstructor.selectIngredients,
-    })
+  const getIngredientsState = (state) => state.ingredients.ingredients;
+  const getIngredientDetailState = (state) =>
+    state.ingredientDetail.ingredientDetail;
+  const getBunState = (state) => state.burgerConstructor.bun;
+  const getSelectIngredientsState = (state) =>
+    state.burgerConstructor.selectIngredients;
+
+  const selectIngredients = createSelector(
+    getIngredientsState,
+    (ingredients) => ingredients
   );
 
-  const buns = useMemo(
-    () => ingredients.filter((item) => item.type === "bun"),
-    [ingredients]
+  const selectIngredientDetail = createSelector(
+    getIngredientDetailState,
+    (detail) => detail
   );
-  const mains = useMemo(
-    () => ingredients.filter((item) => item.type === "main"),
-    [ingredients]
+
+  const selectBun = createSelector(getBunState, (bun) => bun);
+
+  const selectSelectedIngredients = createSelector(
+    getSelectIngredientsState,
+    (selectedIngredients) => selectedIngredients
   );
-  const sauces = useMemo(
-    () => ingredients.filter((item) => item.type === "sauce"),
-    [ingredients]
-  );
+
+  const ingredients = useSelector(selectIngredients);
+  const ingredientDetail = useSelector(selectIngredientDetail);
+  const bun = useSelector(selectBun);
+  const selectedIngredients = useSelector(selectSelectedIngredients);
+
+  const { buns, mains, sauces } = useMemo(() => {
+    const buns = ingredients.filter((item) => item.type === "bun");
+    const mains = ingredients.filter((item) => item.type === "main");
+    const sauces = ingredients.filter((item) => item.type === "sauce");
+
+    return { buns, mains, sauces };
+  }, [ingredients]);
 
   const [current, setCurrent] = useState("buns");
 
@@ -47,7 +62,7 @@ const BurgerIngredients = () => {
     if (bun && bun._id === id) {
       return 1;
     }
-    return selectIngredients.filter((item) => item._id === id).length;
+    return selectedIngredients.filter((item) => item._id === id).length;
   };
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -125,7 +140,7 @@ const BurgerIngredients = () => {
         <div className={`${styles.ingredients} pl-4 pr-4`}>
           {buns.map((ingredient) => (
             <Ingredient
-              key={uuidv4()}
+              key={ingredient._id}
               {...ingredient}
               counter={getIngredientCount(ingredient._id)}
               openModal={() => openModal(ingredient)}
@@ -138,7 +153,7 @@ const BurgerIngredients = () => {
         <div className={`${styles.ingredients} pl-4 pr-4`}>
           {sauces.map((ingredient) => (
             <Ingredient
-              key={uuidv4()}
+              key={ingredient._id}
               {...ingredient}
               counter={getIngredientCount(ingredient._id)}
               openModal={() => openModal(ingredient)}
@@ -151,7 +166,7 @@ const BurgerIngredients = () => {
         <div className={`${styles.ingredients} pl-4 pr-4`}>
           {mains.map((ingredient) => (
             <Ingredient
-              key={uuidv4()}
+              key={ingredient._id}
               {...ingredient}
               counter={getIngredientCount(ingredient._id)}
               openModal={() => openModal(ingredient)}
