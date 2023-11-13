@@ -1,0 +1,9 @@
+.bun {
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon_inactive {
+    opacity: 0;
+    overflow: hidden;
+  }
