@@ -18,10 +18,7 @@ const Modal = (props) => {
   }, []);
 
   return ReactDOM.createPortal(
-    <div
-      className={`${styles.modal} ${
-        props.isActive ? styles.modal_active : ""
-      }`}>
+    <div className={styles.modal}>
       <ModalOverlay onClose={props.onClose} />
       <div className={styles.wrapper}>
         <div className={`${styles.head} pt-10`}>

@@ -128,9 +128,11 @@ const BurgerConstructor = () => {
           </Button>
         </div>
       </div>
-      <Modal onClose={closeModal} isActive={modalOpen}>
-        <OrderDetails orderId={orderId} />
-      </Modal>
+      {modalOpen && (
+        <Modal onClose={closeModal}>
+          <OrderDetails orderId={orderId} />
+        </Modal>
+      )}
     </section>
   );
 };

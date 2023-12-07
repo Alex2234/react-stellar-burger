@@ -1,0 +1,31 @@
+
+.container {
+    width: 1280px;
+    margin: 0 auto;
+}
+
+.wrapper {
+    margin-top: 120px;
+    display: flex;
+    column-gap: 60px;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    max-width: 320px;
+}
+
+.link {
+    text-decoration: none;
+    cursor: pointer;
+    padding: 17px 0;
+    text-align: left;
+    border: none;
+    background: none;
+}
+
+.active {
+    color: #fff;
+}
