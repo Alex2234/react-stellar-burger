@@ -6,6 +6,13 @@
     margin: auto;
 }
 
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
 .link {
     text-decoration: none;
     color: #4C4CFF;

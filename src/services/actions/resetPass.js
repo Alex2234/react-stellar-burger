@@ -10,12 +10,13 @@ export const postResetPass = (pass, token) => {
       type: POST_RESET_PASS_REQUEST,
     });
     fetchPostResetPassRequest(pass, token)
-      .then((res) =>
+      .then((res) => {
         dispatch({
           type: POST_RESET_PASS_SUCCESS,
           dataResetPass: res,
         })
-      )
+        localStorage.removeItem("Success");
+      })
       .catch((err) => {
         dispatch({
           type: POST_RESET_PASS_FAILED,

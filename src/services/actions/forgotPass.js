@@ -10,17 +10,18 @@ export const postForgotPass = (email) => {
       type: POST_FORGOT_PASS_REQUEST,
     });
     fetchPostForgotPassRequest(email)
-      .then((res) =>
+      .then((res) => {
+        localStorage.setItem("Success", res.success);
         dispatch({
           type: POST_FORGOT_PASS_SUCCESS,
           dataForgotPass: res,
-        })
-      )
+        });
+      })
       .catch((err) => {
         dispatch({
           type: POST_FORGOT_PASS_FAILED,
           dataForgotPass: err,
         });
-      });
+      })
   };
 };

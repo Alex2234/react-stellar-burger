@@ -36,10 +36,19 @@ const App = () => {
         <AppHeader />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registration />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
+          <Route
+            path="/register"
+            element={<OnlyUnAuth component={<Registration />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<OnlyUnAuth component={<ForgotPassword />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<OnlyUnAuth component={<ResetPassword />} />}
+          />
           <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
             <Route index element={<ProfileData />} />
             <Route path="orders" element={<Orders />} />

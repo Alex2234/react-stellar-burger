@@ -25,6 +25,14 @@ import {
           profileRequest: true,
         };
       }
+      case GET_PROFILE_FAILED: {
+        return {
+          ...state,
+          profileFailed: true,
+          profileRequest: false,
+          user: null
+        };
+      }
       case SET_AUTH_CHECKED: {
         return {
           ...state,
@@ -35,16 +43,6 @@ import {
         return {
           ...state,
           user: action.user,
-          profileRequest: false,
-        };
-      }
-    
-      case GET_PROFILE_FAILED: {
-        return {
-          ...state,
-          profileFailed: true,
-          profileRequest: false,
-          user: null
         };
       }
       case PATCH_PROFILE_REQUEST: {

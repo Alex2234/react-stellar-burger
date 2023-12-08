@@ -13,6 +13,11 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
 
+  const submitForgotPass = (e) => {
+    e.preventDefault();
+    dispatch(postForgotPass(email));
+  };
+
   const getDataForgotPass = (state) => state.forgotPass;
 
   const dataForgotPass = createSelector(
@@ -28,30 +33,26 @@ const ForgotPassword = () => {
     }
   }
 
-  const submitForgotPass = (e) => {
-    e.preventDefault();
-    dispatch(postForgotPass(email));
-  };
-
   return (
     <div className={styles.wrapper}>
       <h2 className="text text_type_main-medium pb-4">Восстановление пароля</h2>
-      <EmailInput
-        placeholder={"Укажите e-mail"}
-        name={"email"}
-        isIcon={false}
-        extraClass="pb-4"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <Button
-        htmlType="button"
-        type="primary"
-        size="large"
-        extraClass="mb-20"
-        onClick={submitForgotPass}>
-        Восстановить
-      </Button>
+      <form onSubmit={submitForgotPass} className={styles.form}>
+        <EmailInput
+          placeholder={"Укажите e-mail"}
+          name={"email"}
+          isIcon={false}
+          extraClass="pb-4"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Button
+          htmlType="submit"
+          type="primary"
+          size="large"
+          extraClass="mb-20">
+          Восстановить
+        </Button>
+      </form>
       <p className="text text_type_main-default text_color_inactive">
         Вспомнили пароль?{" "}
         <Link to="/login" className={styles.link}>
