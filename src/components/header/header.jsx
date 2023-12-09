@@ -1,35 +1,44 @@
-import React from "react";
-import styles from "../../components/header/header.module.css";
+import styles from "./header.module.css";
 import {
   Logo,
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { NavLink } from "react-router-dom";
 
 const AppHeader = () => {
+  const Link = ({ to, Icon, title }) => {
+    return (
+      <NavLink
+        to={to}
+        className={({ isActive }) =>
+          `${styles.link} pl-5 pr-5 pb-5 pt-5 ${isActive ? styles.active : ""}`
+        }>
+        {({ isActive }) => (
+          <div className={styles.button}>
+            <Icon type={isActive ? "primary" : "secondary"} />
+            <p
+              className={`text text_type_main-default p-2 ${
+                isActive ? styles.active : "text_color_inactive"
+              }`}>
+              {title}
+            </p>
+          </div>
+        )}
+      </NavLink>
+    );
+  };
+
   return (
     <header className={styles.header}>
       <div className={`${styles.container} p-4`}>
         <nav className={`${styles.nav}`}>
-          <a className={`${styles.link} pl-5 pr-5 pb-5 pt-5`} href="">
-            <BurgerIcon type="primary" />
-            <p className="text text_type_main-default p-2">Конструктор</p>
-          </a>
-          <a className={`${styles.link} pl-5 pr-5 pb-5 pt-5`} href="">
-            <ListIcon type="secondary" />
-            <p className="text text_type_main-default text_color_inactive p-2">
-              Лента заказов
-            </p>
-          </a>
+          <Link to="/" Icon={BurgerIcon} title="Конструктор" />
+          <Link to="" Icon={ListIcon} title="Лента заказов" />
         </nav>
         <Logo />
-        <a className={`${styles.link} pl-5 pr-5 pb-5 pt-5`} href="">
-          <ProfileIcon type="secondary" />
-          <p className="text text_type_main-default text_color_inactive p-2">
-            Личный кабинет
-          </p>
-        </a>
+        <Link to="/profile" Icon={ProfileIcon} title="Личный кабинет" />
       </div>
     </header>
   );

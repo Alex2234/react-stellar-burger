@@ -16,9 +16,19 @@
   display: flex;
 }
 
+
 .link {
-  display: flex;
   text-decoration: none;
-  align-items: center;
   color: inherit;
+  cursor: pointer;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  
+}
+
+.active {
+  color: #fff;
 }

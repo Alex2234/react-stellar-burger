@@ -2,26 +2,22 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "./ingredient/ingredient";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-detail";
 import { getIngredients } from "../../services/actions/ingredients";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getIngredientDetail,
-  deleteIngredientDetail,
-} from "../../services/actions/ingredientDetail";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
+
+  const location = useLocation();
 
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
 
   const getIngredientsState = (state) => state.ingredients.ingredients;
-  const getIngredientDetailState = (state) =>
-    state.ingredientDetail.ingredientDetail;
   const getBunState = (state) => state.burgerConstructor.bun;
   const getSelectIngredientsState = (state) =>
     state.burgerConstructor.selectIngredients;
@@ -29,11 +25,6 @@ const BurgerIngredients = () => {
   const selectIngredients = createSelector(
     getIngredientsState,
     (ingredients) => ingredients
-  );
-
-  const selectIngredientDetail = createSelector(
-    getIngredientDetailState,
-    (detail) => detail
   );
 
   const selectBun = createSelector(getBunState, (bun) => bun);
@@ -44,7 +35,6 @@ const BurgerIngredients = () => {
   );
 
   const ingredients = useSelector(selectIngredients);
-  const ingredientDetail = useSelector(selectIngredientDetail);
   const bun = useSelector(selectBun);
   const selectedIngredients = useSelector(selectSelectedIngredients);
 
@@ -63,18 +53,6 @@ const BurgerIngredients = () => {
       return 1;
     }
     return selectedIngredients.filter((item) => item._id === id).length;
-  };
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const openModal = (ingredientDetail) => {
-    setModalOpen(true);
-    dispatch(getIngredientDetail(ingredientDetail));
-  };
-
-  const closeModal = (ingredientDetail) => {
-    setModalOpen(false);
-    dispatch(deleteIngredientDetail(ingredientDetail));
   };
 
   const bunsRef = useRef(null);
@@ -139,12 +117,16 @@ const BurgerIngredients = () => {
         </h3>
         <div className={`${styles.ingredients} pl-4 pr-4`}>
           {buns.map((ingredient) => (
-            <Ingredient
+            <Link
+              to={`/ingredients/${ingredient._id}`}
+              className={styles.link}
               key={ingredient._id}
-              {...ingredient}
-              counter={getIngredientCount(ingredient._id)}
-              openModal={() => openModal(ingredient)}
-            />
+              state={{ background: location }}>
+              <Ingredient
+                {...ingredient}
+                counter={getIngredientCount(ingredient._id)}
+              />
+            </Link>
           ))}
         </div>
         <h3 ref={saucesRef} className="text text_type_main-medium pt-10 pb-6">
@@ -152,12 +134,16 @@ const BurgerIngredients = () => {
         </h3>
         <div className={`${styles.ingredients} pl-4 pr-4`}>
           {sauces.map((ingredient) => (
-            <Ingredient
+            <Link
+              to={`/ingredients/${ingredient._id}`}
+              className={styles.link}
               key={ingredient._id}
-              {...ingredient}
-              counter={getIngredientCount(ingredient._id)}
-              openModal={() => openModal(ingredient)}
-            />
+              state={{ background: location }}>
+              <Ingredient
+                {...ingredient}
+                counter={getIngredientCount(ingredient._id)}
+              />
+            </Link>
           ))}
         </div>
         <h3 ref={mainsRef} className="text text_type_main-medium pt-10 pb-6">
@@ -165,21 +151,19 @@ const BurgerIngredients = () => {
         </h3>
         <div className={`${styles.ingredients} pl-4 pr-4`}>
           {mains.map((ingredient) => (
-            <Ingredient
+            <Link
+              to={`/ingredients/${ingredient._id}`}
+              className={styles.link}
               key={ingredient._id}
-              {...ingredient}
-              counter={getIngredientCount(ingredient._id)}
-              openModal={() => openModal(ingredient)}
-            />
+              state={{ background: location }}>
+              <Ingredient
+                {...ingredient}
+                counter={getIngredientCount(ingredient._id)}
+              />
+            </Link>
           ))}
         </div>
       </div>
-      <Modal
-        title="Детали ингредиента"
-        onClose={closeModal}
-        isActive={modalOpen}>
-        <IngredientDetails ingredient={ingredientDetail} />
-      </Modal>
     </section>
   );
 };

@@ -48,3 +48,8 @@
   visibility: visible;
   transition-delay: 0s;
 }
+
+.link {
+  text-decoration: none;
+  color: #fff;
+}

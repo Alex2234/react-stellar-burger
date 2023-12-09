@@ -1,0 +1,15 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttons {
+    display: none;
+    justify-content: end;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.buttons_active {
+    display: flex;
+}
