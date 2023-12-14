@@ -1,0 +1,24 @@
+.feed {
+    max-height: 75vh;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #8585ad #2f2f37;
+    -ms-overflow-style: auto;
+  }
+  
+  .feed::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .feed::-webkit-scrollbar-track {
+    background: #2f2f37;
+  }
+  
+  .feed::-webkit-scrollbar-thumb {
+    background-color: #8585ad;
+  }
+
+  .link {
+    text-decoration: none;
+    color: #fff;
+  }

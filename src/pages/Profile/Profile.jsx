@@ -3,28 +3,28 @@ import { NavLink, Outlet, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { postLogout } from "../../services/actions/logout";
+import { useParams, useLocation } from "react-router-dom";
 
 const Profile = () => {
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-const getDataLogout = (state) => state.logout;
+  const location = useLocation();
 
-const getLogout = createSelector(
-  [getDataLogout],
-  (logout) => logout.logout
-)
+  const getDataLogout = (state) => state.logout;
 
-const resLogout = useSelector(getLogout);
+  const getLogout = createSelector([getDataLogout], (logout) => logout.logout);
 
-if(resLogout) {
-  if(resLogout.success) {
-    return <Navigate to="/login" />
+  const resLogout = useSelector(getLogout);
+
+  if (resLogout) {
+    if (resLogout.success) {
+      return <Navigate to="/login" />;
+    }
   }
-}
 
-const submitLogout = () => {
-  dispatch(postLogout())
-}
+  const submitLogout = () => {
+    dispatch(postLogout());
+  };
 
   return (
     <div className={styles.container}>
@@ -51,11 +51,20 @@ const submitLogout = () => {
             История заказов
           </NavLink>
           <button
-            className={`${styles.link} text text_type_main-medium text_color_inactive`} onClick={submitLogout}>
+            className={`${styles.link} text text_type_main-medium text_color_inactive`}
+            onClick={submitLogout}>
             Выход
           </button>
           <p className="text text_type_main-default text_color_inactive mt-20">
-            В этом разделе вы можете&nbsp; изменить свои персональные данные
+            {location.pathname === "/profile" ? (
+              <span>
+                В этом разделе вы можете&nbsp; изменить свои персональные данные
+              </span>
+            ) : (
+              <span>
+                В этом разделе вы можете&nbsp; посмотреть свою историю заказов
+              </span>
+            )}
           </p>
         </div>
         <Outlet />

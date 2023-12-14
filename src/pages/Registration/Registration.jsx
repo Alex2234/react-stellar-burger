@@ -1,4 +1,4 @@
-import { useState } from "react";
+import useForm from "../../hooks/useForm";
 import styles from "./registraion.module.css";
 import {
   Button,
@@ -12,9 +12,7 @@ import { createSelector } from "reselect";
 import { postRegistration } from "../../services/actions/registration";
 
 const Registration = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [values, onChange] = useForm({ name: "", email: "", password: "" });
   const dispatch = useDispatch();
 
   const getDataRegister = (state) => state.registration;
@@ -35,7 +33,7 @@ const Registration = () => {
 
   const submitRegister = (e) => {
     e.preventDefault();
-    dispatch(postRegistration(name, email, password));
+    dispatch(postRegistration(values.name, values.email, values.password));
   };
 
   return (
@@ -46,22 +44,22 @@ const Registration = () => {
           type={"text"}
           placeholder={"Имя"}
           name={"name"}
-          value={name}
+          value={values.name}
           extraClass="pb-4"
-          onChange={(e) => setName(e.target.value)}
+          onChange={onChange}
         />
         <EmailInput
           name={"email"}
           isIcon={false}
-          value={email}
+          value={values.email}
           extraClass="pb-4"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={onChange}
         />
         <PasswordInput
           name={"password"}
           extraClass="pb-4"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values.password}
+          onChange={onChange}
         />
         <Button
           htmlType="submit"

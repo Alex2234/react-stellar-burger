@@ -1,4 +1,4 @@
-import { useState } from "react";
+import useForm  from "../../hooks/useForm";
 import styles from "./forgotpassword.module.css";
 import {
   Button,
@@ -10,12 +10,12 @@ import { createSelector } from "reselect";
 import { postForgotPass } from "../../services/actions/forgotPass";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
+  const [values, onChange] = useForm({ email: ''});
   const dispatch = useDispatch();
 
   const submitForgotPass = (e) => {
     e.preventDefault();
-    dispatch(postForgotPass(email));
+    dispatch(postForgotPass(values.email));
   };
 
   const getDataForgotPass = (state) => state.forgotPass;
@@ -42,8 +42,8 @@ const ForgotPassword = () => {
           name={"email"}
           isIcon={false}
           extraClass="pb-4"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={values.email}
+          onChange={onChange}
         />
         <Button
           htmlType="submit"

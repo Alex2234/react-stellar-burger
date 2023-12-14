@@ -1,4 +1,4 @@
-import { useState } from "react";
+import useForm from "../../hooks/useForm";
 import styles from "./resetpassword.module.css";
 import {
   Button,
@@ -11,14 +11,13 @@ import { postResetPass } from "../../services/actions/resetPass";
 import { createSelector } from "reselect";
 
 const ResetPassword = () => {
-  const [pass, setPass] = useState("");
-  const [token, setToken] = useState("");
+  const [values, onChange] = useForm({ pass: "", token: "" });
 
   const dispatch = useDispatch();
 
   const submitResetPass = (e) => {
     e.preventDefault();
-    dispatch(postResetPass(pass, token));
+    dispatch(postResetPass(values.pass, values.token));
   };
 
   const getDataResetPass = (state) => state.resetPass;
@@ -48,16 +47,16 @@ const ResetPassword = () => {
           placeholder={"Введите новый пароль"}
           name={"password"}
           extraClass="pb-4"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
+          value={values.pass}
+          onChange={onChange}
         />
         <Input
           type={"text"}
           placeholder={"Введите код из письма"}
           name={"код"}
           extraClass="pb-4"
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
+          value={values.token}
+          onChange={onChange}
         />
         <Button
           htmlType="submit"
