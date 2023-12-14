@@ -1,76 +1,53 @@
 import styles from "./order-info.module.css";
 import { useEffect, useMemo } from "react";
+import IngredientInfo from "../ingredientInfo/ingredientInfo";
 import {
   CurrencyIcon,
   FormattedDate,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  connect,
-  disconnect,
-  getHttpsOrder,
-} from "../../services/actions/feed";
-import { wsUrl } from "../../utils/constants";
-import { getIngredients } from "../../services/actions/ingredients";
-
-const IngredientInfo = ({ img, name, price, count }) => {
-  return (
-    <div className={styles.ingredientWrapper}>
-      <div className={`${styles.circle} mr-4`}>
-        <img className={styles.logo} src={img} alt={name} />
-      </div>
-      <p
-        className={`${styles.nameIngredient} text text_type_main-default mr-4`}>
-        {name}
-      </p>
-      <div className={`${styles.price} mr-6`}>
-        <p className="text text_type_main-default">{count}</p>
-        <p className="text text_type_main-default">X</p>
-        <p className="text text_type_digits-default">{price}</p>
-        <CurrencyIcon type="Primary" />
-      </div>
-    </div>
-  );
-};
+import { getHttpsOrder } from "../../services/actions/feed";
 
 const OrderInfo = () => {
   const { number } = useParams();
   const orderNumber = parseInt(number, 10);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getIngredients());
-    dispatch(connect(`${wsUrl}/all`));
+  const orders = useSelector((state) => {
+    let orders = state.feed.orders.find(
+      (order) => order.number === orderNumber
+    );
+    if (orders) {
+      return orders;
+    }
 
-    return () => {
-      dispatch(disconnect());
-    };
-  }, [dispatch]);
+    orders = state.historyOrders.orders.find(
+      (order) => order.number === orderNumber
+    );
+
+    if (orders) {
+      return orders;
+    }
+
+    return state.feed.order;
+  });
 
   const ingredients = useSelector((state) => state.ingredients.ingredients);
-  const orders = useSelector((state) => state.feed.orders);
-
-  const httpsOrder = useSelector((state) => state.feed.order);
 
   useEffect(() => {
-    if (!orders.some((order) => order.number === orderNumber)) {
-      dispatch(disconnect());
-      dispatch(getHttpsOrder(number));
+    if (!orders) {
+      dispatch(getHttpsOrder(orderNumber));
     }
-  }, [dispatch, orders, number, orderNumber]);
-
-  const currentOrder = useMemo(() => {
-    return orders.find((order) => order.number === orderNumber) || httpsOrder;
-  }, [orders, orderNumber, httpsOrder]);
+  }, [orders]);
 
   const findIngredients = useMemo(() => {
-    return currentOrder
-      ? currentOrder.ingredients.map((ingredientId) =>
+    return orders
+      ? orders.ingredients.map((ingredientId) =>
           ingredients.find((ingredient) => ingredient._id === ingredientId)
         )
       : [];
-  }, [currentOrder, ingredients]);
+  }, [ingredients, orders]);
 
   const uniqIngredients = useMemo(() => {
     const allIngredients = findIngredients.filter(Boolean);
@@ -112,7 +89,7 @@ const OrderInfo = () => {
     }
   };
 
-  if (!currentOrder) {
+  if (!orders) {
     return (
       <div className={styles.preloader}>
         <p className="text text_type_main-large">Загрузка...</p>
@@ -123,13 +100,13 @@ const OrderInfo = () => {
   return (
     <div className={styles.wrapper}>
       <p className={`${styles.number} text text_type_digits-default mb-10`}>
-        #{currentOrder.number}
+        #{orders.number}
       </p>
       <h2 className={`${styles.name} text text_type_main-medium mb-3`}>
-        {currentOrder.name}
+        {orders.name}
       </h2>
       <p className={`${styles.status} text text_type_main-default mb-15`}>
-        {getStatus(currentOrder.status)}:
+        {getStatus(orders.status)}:
       </p>
       <p className={`${styles.compound} text text_type_main-medium mb-6`}>
         Состав:
@@ -147,7 +124,7 @@ const OrderInfo = () => {
       </div>
       <div className={`${styles.footer} mb-10`}>
         <p className="text text_type_main-default text_color_inactive">
-          <FormattedDate date={new Date(currentOrder.createdAt)} /> i-GMT +3
+          <FormattedDate date={new Date(orders.createdAt)} /> i-GMT +3
         </p>
         <div className={styles.prices}>
           <p className="text text_type_digits-default">{sumOrder}</p>

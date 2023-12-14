@@ -1,22 +1,21 @@
 import styles from "./orders.module.css";
 import { useEffect } from "react";
-import { Order } from "../Feed/Feed";
+import Order from "../../components/Order/Order";
 import { useSelector, useDispatch } from "react-redux";
-import { connect } from "../../services/actions/historyOrders";
+import { connect, disconnect } from "../../services/actions/historyOrders";
 import { wsUrl } from "../../utils/constants";
 import { Link, useLocation } from "react-router-dom";
-
 
 const Orders = () => {
   const dispatch = useDispatch();
 
-  const token = localStorage.getItem("accessToken").split('Bearer ')[1];
-
-  console.log(token)
-
+  const token = localStorage.getItem("accessToken").split("Bearer ")[1];
 
   useEffect(() => {
     dispatch(connect(`${wsUrl}?token=${token}`));
+    return () => {
+      dispatch(disconnect());
+    };
   }, [dispatch]);
 
   const location = useLocation();
@@ -34,7 +33,7 @@ const Orders = () => {
     <div className={styles.feed}>
       {orders.map((order, index) => (
         <Link
-          to={`/orders/${order.number}`}
+          to={`/profile/orders/${order.number}`}
           key={index}
           state={{ background: location }}
           className={styles.link}>

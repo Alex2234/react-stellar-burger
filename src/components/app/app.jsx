@@ -1,5 +1,5 @@
 import styles from "./app.module.css";
-import AppHeader from "../Header/header";
+import AppHeader from "../header/header";
 import Home from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
 import Registration from "../../pages/Registration/Registration";
@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { checkUserAuth } from "../../services/actions/profile";
 import { OnlyAuth, OnlyUnAuth } from "../ProtectedRoute/ProtectedRouteElement";
+import { getIngredients } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
 
 const App = () => {
@@ -31,6 +32,10 @@ const App = () => {
   useEffect(() => {
     dispatch(checkUserAuth());
   }, []);
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   return (
     <>
@@ -61,7 +66,10 @@ const App = () => {
           />
           <Route path="/feed" element={<Feed />} />
           <Route path="/feed/:number" element={<OrderInfo />} />
-          <Route path="/orders/:number" element={<OrderInfo />} />
+          <Route
+            path="/profile/orders/:number"
+            element={<OnlyAuth component={<OrderInfo />} />}
+          />
         </Routes>
       </div>
 
@@ -84,7 +92,7 @@ const App = () => {
             }
           />
           <Route
-            path="/orders/:number"
+            path="/profile/orders/:number"
             element={
               <Modal onClose={closeModal}>
                 <OrderInfo />

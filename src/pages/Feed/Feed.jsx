@@ -1,107 +1,21 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import styles from "./feed.module.css";
-import {
-  FormattedDate,
-  CurrencyIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-import { getIngredients } from "../../services/actions/ingredients";
-import { createSelector } from "reselect";
+import Order from "../../components/Order/Order";
 import { useSelector, useDispatch } from "react-redux";
-import { connect } from "../../services/actions/feed";
+import { connect, disconnect } from "../../services/actions/feed";
 import { wsUrl } from "../../utils/constants";
 import { Link, useLocation } from "react-router-dom";
 
-const CircleIcons = ({ icons }) => {
-  const maxIcons = 5;
 
-  const displayedIcons = icons.slice(0, maxIcons);
-  const extraIconsCount = icons.length > maxIcons ? icons.length - maxIcons : 0;
-
-  return (
-    <div className={styles.iconsContainer}>
-      {displayedIcons.map((icon, index) => (
-        <div key={index} className={styles.circle}>
-          <img className={styles.icon} src={icon} alt="icon" />
-          {index === maxIcons - 1 && extraIconsCount > 0 && (
-            <>
-              <div className={styles.overlay}></div>
-              <p className={`${styles.iconText} text text_type_digits-default`}>
-                +{extraIconsCount}
-              </p>
-            </>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export const Order = ({ order }) => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
-  const getIngredientsState = (state) => state.ingredients.ingredients;
-  const selectIngredients = createSelector(
-    getIngredientsState,
-    (ingredients) => ingredients
-  );
-
-  const ingredients = useSelector(selectIngredients);
-
-  const findIngredients = order.ingredients.map((ingredientId) =>
-    ingredients.find((ingredient) => ingredient._id === ingredientId)
-  );
-
-  const iconFind = useMemo(() => {
-    const allIcon = findIngredients
-      .map((ingredient) => {
-        return ingredient ? ingredient.image : null;
-      })
-      .filter(Boolean);
-
-    const uniqueIcon = [...new Set(allIcon)];
-
-    return uniqueIcon;
-  }, [findIngredients]);
-
-  const sumOrder = useMemo(() => {
-    let total = 0;
-    findIngredients.forEach((ingredient) => {
-      if (ingredient) {
-        total += ingredient.price;
-      }
-    });
-    return total;
-  }, [findIngredients]);
-
-  return (
-    <div className={`${styles.order} mb-4 mr-2`}>
-      <div className={`${styles.head} pb-6`}>
-        <p className="text text_type_digits-default">#{order.number}</p>
-        <p className="text text_type_main-default text_color_inactive">
-          <FormattedDate date={new Date(order.createdAt)} /> i-GMT +3
-        </p>
-      </div>
-      <h2 className="text text_type_main-medium pb-6">{order.name}</h2>
-      <div className={styles.details}>
-        <CircleIcons icons={iconFind} />
-        <div className={styles.prices}>
-          <p className="text text_type_digits-default">{sumOrder}</p>
-          <CurrencyIcon type="primary" />
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const Feed = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(connect(`${wsUrl}/all`));
+    return () => {
+      dispatch(disconnect());
+    };
   }, [dispatch]);
 
   const location = useLocation();
