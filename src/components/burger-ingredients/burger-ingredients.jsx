@@ -5,8 +5,7 @@ import Ingredient from "./ingredient/ingredient";
 import { getIngredients } from "../../services/actions/ingredients";
 import { createSelector } from "reselect";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
@@ -96,6 +95,14 @@ const BurgerIngredients = () => {
       };
     }
   }, []);
+
+  if(!ingredients) {
+    return (
+      <div className={styles.preloader}>
+        <p className="text text_type_main-large">Загрузка...</p>
+      </div>
+    )
+  }
 
   return (
     <section className={styles.section}>

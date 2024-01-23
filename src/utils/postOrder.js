@@ -1,12 +1,19 @@
 import { url } from "./constants";
-import { checkResponse } from "./checkResponse";
+import { fetchWithRefresh } from "./fetchWithRefresh";
+
+
+const endpoint = '/orders';
+
+const fullUrl = url + endpoint;
+
 
 export const fetchPostOrderRequest = (ingredients) => {
-    return fetch(`${url}/orders`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ ingredients: ingredients })
-    }).then(checkResponse);
-  };
+    return fetchWithRefresh(fullUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('accessToken')
+        },
+        body: JSON.stringify({ ingredients: ingredients })
+      })
+}

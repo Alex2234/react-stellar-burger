@@ -1,4 +1,4 @@
-import { useState } from "react";
+import  useForm  from "../../hooks/useForm";
 import styles from "./login.module.css";
 import {
   EmailInput,
@@ -10,13 +10,12 @@ import { useDispatch } from "react-redux";
 import { postAuthorization } from "../../services/actions/authorization";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [values, onChange] = useForm({ email: '', password: '' });
 
   const dispatch = useDispatch();
   const submitAuthorization = (e) => {
     e.preventDefault();
-    dispatch(postAuthorization(email, password));
+    dispatch(postAuthorization(values.email, values.password));
   };
 
   return (
@@ -26,14 +25,14 @@ const Login = () => {
         <EmailInput
           name={"email"}
           isIcon={false}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={values.email}
+          onChange={onChange}
           extraClass="pb-4"
         />
         <PasswordInput
           name={"password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values.password}
+          onChange={onChange}
           extraClass="pb-4"
         />
         <Button

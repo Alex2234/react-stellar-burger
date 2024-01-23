@@ -41,9 +41,10 @@ const ProfileData = () => {
     setIsChanged(true);
   };
 
+
   const submitSave = () => {
-    dispatch(patchProfile(name, login, pass));
-  };
+    dispatch(patchProfile(name, login, pass))
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -78,11 +79,7 @@ const ProfileData = () => {
         <Button htmlType="button" type="secondary" size="medium">
           Отмена
         </Button>
-        <Button
-          htmlType="button"
-          type="primary"
-          size="large"
-          onClick={submitSave}>
+        <Button htmlType="button" type="primary" size="large" onClick={submitSave}>
           Сохранить
         </Button>
       </div>

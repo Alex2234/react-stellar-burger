@@ -35,7 +35,7 @@ const AppHeader = () => {
       <div className={`${styles.container} p-4`}>
         <nav className={`${styles.nav}`}>
           <Link to="/" Icon={BurgerIcon} title="Конструктор" />
-          <Link to="" Icon={ListIcon} title="Лента заказов" />
+          <Link to="/feed" Icon={ListIcon} title="Лента заказов" />
         </nav>
         <Logo />
         <Link to="/profile" Icon={ProfileIcon} title="Личный кабинет" />

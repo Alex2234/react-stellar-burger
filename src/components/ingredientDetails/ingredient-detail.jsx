@@ -19,7 +19,13 @@ const IngredientDetails = ({ title }) => {
     }
   }, []);
 
-  if (!ingredient) return null;
+  if (!ingredient) {
+    return (
+      <div className={styles.preloader}>
+        <p className="text text_type_main-large">Загрузка...</p>
+      </div>
+    )
+  };
 
   return (
     <>

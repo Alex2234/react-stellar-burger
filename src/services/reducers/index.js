@@ -9,6 +9,9 @@ import { forgotPassReducer } from "./forgotPass";
 import { resetPassReducer } from "./resetPass";
 import { profileReducer } from "./profile";
 import { logoutReducer } from "./logout";
+import { feedReducer } from "./feed";
+import { historyOrdersReducer } from "./historyOrders";
+
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -20,5 +23,7 @@ export const rootReducer = combineReducers({
   forgotPass: forgotPassReducer,
   resetPass: resetPassReducer,
   profile: profileReducer,
-  logout: logoutReducer
+  logout: logoutReducer,
+  feed: feedReducer,
+  historyOrders: historyOrdersReducer,
 });

@@ -1,0 +1,62 @@
+.preloader {
+  margin: auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 640px;
+}
+
+.number {
+  text-align: center;
+}
+
+.name {
+  text-align: left;
+}
+
+.status {
+  text-align: left;
+  color: #0cc;
+}
+
+.compound {
+  text-align: left;
+}
+
+.compoundContainer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  height: 320px;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #8585ad #2f2f37;
+  -ms-overflow-style: auto;
+}
+
+.compoundContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.compoundContainer::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+
+.compoundContainer::-webkit-scrollbar-thumb {
+  background-color: #8585ad;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.prices {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}

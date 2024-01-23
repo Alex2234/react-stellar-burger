@@ -7,7 +7,7 @@ import {
 import Bun from "./bun-constructor/bunConstructor";
 import DragIngredient from "./dragIngredient-constructor/dragIngredientConstructor";
 import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
+import OrderDetails from "../OrderDetails/order-details";
 import { postOrder } from "../../services/actions/order";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
