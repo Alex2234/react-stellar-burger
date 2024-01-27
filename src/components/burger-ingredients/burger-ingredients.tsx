@@ -4,14 +4,14 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Ingredient from "./ingredient/ingredient";
 import { getIngredients } from "../../services/actions/ingredients";
 import { createSelector } from "reselect";
-import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { RootState } from "../../services/reducers";
 import { TIngredient } from "../../types/types";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const location = useLocation();
 
@@ -37,9 +37,9 @@ const BurgerIngredients = () => {
     (selectedIngredients) => selectedIngredients
   );
 
-  const ingredients = useTypedSelector(selectIngredients);
-  const bun = useTypedSelector(selectBun);
-  const selectedIngredients = useTypedSelector(selectSelectedIngredients);
+  const ingredients = useAppSelector(selectIngredients);
+  const bun = useAppSelector(selectBun);
+  const selectedIngredients = useAppSelector(selectSelectedIngredients);
 
   const { buns, mains, sauces } = useMemo(() => {
     const buns = ingredients.filter((item: TIngredient) => item.type === "bun");

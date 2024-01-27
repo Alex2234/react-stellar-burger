@@ -1,4 +1,4 @@
-import { TDetailIngredientActions } from './../actions/ingredientDetail';
+import { TDetailIngredientActions } from "./../actions/ingredientDetail";
 import {
   GET_INGREDIENT_DETAIL,
   DELETE_INGREDIENT_DETAIL,
@@ -7,14 +7,16 @@ import { TIngredient } from "../../types/types";
 
 type TDetailIngredientState = {
   ingredientDetail: TIngredient | null;
-}
+};
 
-
-const initialState = {
+const initialState: TDetailIngredientState = {
   ingredientDetail: null,
 };
 
-export const ingredientDetailReducer = (state = initialState, action: TDetailIngredientActions): TDetailIngredientState => {
+export const ingredientDetailReducer = (
+  state = initialState,
+  action: TDetailIngredientActions
+): TDetailIngredientState => {
   switch (action.type) {
     case GET_INGREDIENT_DETAIL:
       return {

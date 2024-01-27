@@ -7,16 +7,16 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { postRegistration } from "../../services/actions/registration";
 import { RootState } from "../../services/reducers";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { FormEvent } from "react";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Registration = () => {
   const [values, onChange] = useForm({ name: "", email: "", password: "" });
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const getDataRegister = (state: RootState) => state.registration;
 
@@ -25,7 +25,7 @@ const Registration = () => {
     (registration) => registration.dataRegistration
   );
 
-  const resRegister = useTypedSelector(dataRegister);
+  const resRegister = useAppSelector(dataRegister);
 
   if (resRegister) {
     if (resRegister.success) {
@@ -34,7 +34,7 @@ const Registration = () => {
     }
   }
 
-  const submitRegister = (e: FormEvent) => {
+  const submitRegister = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(postRegistration(values.name, values.email, values.password));
   };

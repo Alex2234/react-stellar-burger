@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import styles from "./ingredient-detail.module.css";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { getIngredients } from "../../services/actions/ingredients";
 import { TIngredient } from "../../types/types";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 type TIngredientDetails = {
   title: string;
@@ -12,9 +12,9 @@ type TIngredientDetails = {
 
 const IngredientDetails = ({ title }: TIngredientDetails) => {
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const ingredient = useTypedSelector((state) =>
+  const ingredient = useAppSelector((state) =>
     state.ingredients.ingredients.find(
       (ingredient: TIngredient) => ingredient._id === id
     )

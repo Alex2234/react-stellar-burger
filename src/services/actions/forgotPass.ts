@@ -1,6 +1,8 @@
 import { fetchPostForgotPassRequest } from "../../utils/postForgotPass";
 import { Dispatch } from "redux";
 import { TForgotPass } from "../../types/types";
+import { RootState } from "../reducers";
+import { ThunkAction } from "redux-thunk";
 
 export const POST_FORGOT_PASS_REQUEST: "POST_FORGOT_PASS_REQUEST" =
   "POST_FORGOT_PASS_REQUEST";
@@ -27,7 +29,14 @@ export type TForgotPassActions =
   | PostForgotPassSuccess
   | PostForgotPassFailed;
 
-export const postForgotPass = (email: string) => {
+  type ThunkResult<R = void> = ThunkAction<
+  R,
+  RootState,
+  undefined,
+  TForgotPassActions
+>;
+
+export const postForgotPass = (email: string): ThunkResult => {
   return function (dispatch: Dispatch<TForgotPassActions>) {
     dispatch({
       type: POST_FORGOT_PASS_REQUEST,

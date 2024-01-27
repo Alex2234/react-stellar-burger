@@ -1,6 +1,8 @@
 import { fetchIngredientsRequest } from "../../utils/getIngredients";
 import { TIngredient } from "../../types/types";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
+import { RootState } from "../reducers";
+import { ThunkAction } from "redux-thunk";
 
 export const GET_INGREDIENTS_REQUEST: "GET_INGREDIENTS_REQUEST" =
   "GET_INGREDIENTS_REQUEST";
@@ -22,13 +24,20 @@ type GetIngredientsFailed = {
   type: typeof GET_INGREDIENTS_FAILED;
 };
 
-export type TIngredientsAction =
+export type TIngredientsActions =
   | GetIngredientsRequest
   | GetIngredientsSuccess
   | GetIngredientsFailed;
 
-export const getIngredients = () => {
-  return function (dispatch: Dispatch<TIngredientsAction>) {
+  type ThunkResult<R = void> = ThunkAction<
+  R,
+  RootState,
+  undefined,
+  TIngredientsActions
+>;
+
+export const getIngredients = (): ThunkResult => {
+  return function (dispatch: Dispatch<TIngredientsActions>) {
     dispatch({
       type: GET_INGREDIENTS_REQUEST,
     });

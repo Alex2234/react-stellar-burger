@@ -6,17 +6,17 @@ import {
   FormattedDate,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { getHttpsOrder } from "../../services/actions/feed";
 import { TOrder, TIngredient } from "../../types/types";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const OrderInfo = () => {
   const { number } = useParams<{ number: string }>();
   const orderNumber = number ? parseInt(number, 10) : 0;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const orders = useTypedSelector((state): TOrder | null => {
+  const orders = useAppSelector((state): TOrder | null => {
     const feedOrder = state.feed.orders.find(
       (order: TOrder) => order.number === orderNumber
     );
@@ -37,7 +37,7 @@ const OrderInfo = () => {
   });
 
 
-  const ingredients = useTypedSelector(
+  const ingredients = useAppSelector(
     (state) => state.ingredients.ingredients
   );
 

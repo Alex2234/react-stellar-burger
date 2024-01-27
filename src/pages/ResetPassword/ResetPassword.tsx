@@ -6,19 +6,19 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { postResetPass } from "../../services/actions/resetPass";
 import { createSelector } from "reselect";
 import { RootState } from "../../services/reducers";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { FormEvent } from "react";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const ResetPassword = () => {
   const [values, onChange] = useForm({ pass: "", token: "" });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const submitResetPass = (e: FormEvent) => {
+  const submitResetPass = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(postResetPass(values.pass, values.token));
   };
@@ -30,7 +30,7 @@ const ResetPassword = () => {
     (resetPass) => resetPass.dataResetPass
   );
 
-  const resDataResetPass = useTypedSelector(dataResetPass);
+  const resDataResetPass = useAppSelector(dataResetPass);
 
   if (!localStorage.getItem("Success")) {
     return <Navigate to="/" />;

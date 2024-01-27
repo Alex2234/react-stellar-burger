@@ -3,6 +3,8 @@ import { setAuthChecked, setUser } from "./profile";
 import { TAuthorization } from "../../types/types";
 import { Dispatch } from "redux";
 import { TProfileActions } from "./profile";
+import { RootState } from "../reducers";
+import { ThunkAction } from 'redux-thunk';
 
 export const POST_AUTHORIZATION_REQUEST: "POST_AUTHORIZATION_REQUEST" =
   "POST_AUTHORIZATION_REQUEST";
@@ -29,10 +31,12 @@ export type TAuthorizationActions =
   | PostAuthSuccess
   | PostAuthFailed;
 
+type TCombinedActions = TAuthorizationActions | TProfileActions;
 
-  type TCombinedActions = TAuthorizationActions | TProfileActions;
+type ThunkResult<R = void> = ThunkAction<R, RootState, undefined, TCombinedActions>;
 
-export const postAuthorization = (email: string, password: string) => {
+
+export const postAuthorization = (email: string, password: string): ThunkResult => {
   return function (dispatch: Dispatch<TCombinedActions>) {
     dispatch({
       type: POST_AUTHORIZATION_REQUEST,

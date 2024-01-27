@@ -1,6 +1,8 @@
 import { fetchPostRegistrationRequest } from "../../utils/postRegistration";
 import { TRegistration } from "../../types/types";
 import { Dispatch } from "redux";
+import { RootState } from "../reducers";
+import { ThunkAction } from "redux-thunk";
 
 export const POST_REGISTRATION_REQUEST: "POST_REGISTRATION_REQUEST" =
   "POST_REGISTRATION_REQUEST";
@@ -27,11 +29,18 @@ export type TRegistrationActions =
   | PostRegistrationSuccess
   | PostRegistrationFailed;
 
+type ThunkResult<R = void> = ThunkAction<
+  R,
+  RootState,
+  undefined,
+  TRegistrationActions
+>;
+
 export const postRegistration = (
   name: string,
   email: string,
   password: string
-) => {
+): ThunkResult => {
   return function (dispatch: Dispatch<TRegistrationActions>) {
     dispatch({
       type: POST_REGISTRATION_REQUEST,

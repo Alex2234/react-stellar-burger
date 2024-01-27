@@ -1,4 +1,4 @@
-import { TIngredientsAction } from "./../actions/ingredients";
+import { TIngredientsActions } from "./../actions/ingredients";
 import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
@@ -20,7 +20,7 @@ const initialState: TIngredientsState = {
 
 export const ingredientsReducer = (
   state = initialState,
-  action: TIngredientsAction
+  action: TIngredientsActions
 ): TIngredientsState => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {

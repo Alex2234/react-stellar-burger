@@ -8,7 +8,7 @@ import CircleIcons from "../circleIcons/circleIcons";
 import { createSelector } from "reselect";
 import { TOrder } from "../../types/types";
 import { RootState } from "../../services/reducers";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { TIngredient } from "../../types/types";
 
 type TOrderProps = {
@@ -24,7 +24,7 @@ const Order = ({ order }: TOrderProps) => {
     (ingredients) => ingredients
   );
 
-  const ingredients = useTypedSelector(selectIngredients);
+  const ingredients = useAppSelector(selectIngredients);
 
   const findIngredients = order.ingredients.map((ingredientId) =>
     ingredients.find((ingredient: TIngredient) => ingredient._id === ingredientId)

@@ -6,15 +6,15 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { postAuthorization } from "../../services/actions/authorization";
 import { FormEvent } from "react";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Login = () => {
   const [values, onChange] = useForm({ email: '', password: '' });
 
-  const dispatch = useDispatch();
-  const submitAuthorization = (e: FormEvent) => {
+  const dispatch = useAppDispatch();
+  const submitAuthorization = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(postAuthorization(values.email, values.password));
   };

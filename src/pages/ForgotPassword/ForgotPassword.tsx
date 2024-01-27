@@ -5,18 +5,18 @@ import {
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, Navigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { postForgotPass } from "../../services/actions/forgotPass";
 import { RootState } from "../../services/reducers";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { FormEvent } from "react";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const ForgotPassword = () => {
   const [values, onChange] = useForm({ email: "" });
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const submitForgotPass = (e: FormEvent) => {
+  const submitForgotPass = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(postForgotPass(values.email));
   };
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     (forgotPass) => forgotPass.dataForgotPass
   );
 
-  const resDataForgotPass = useTypedSelector(dataForgotPass);
+  const resDataForgotPass = useAppSelector(dataForgotPass);
 
   if (resDataForgotPass) {
     if (resDataForgotPass.success) {

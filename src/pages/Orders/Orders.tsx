@@ -1,14 +1,14 @@
 import styles from "./orders.module.css";
 import { useEffect } from "react";
 import Order from "../../components/Order/Order";
-import { useDispatch } from "react-redux";
 import { connect, disconnect } from "../../services/actions/historyOrders";
 import { wsUrl } from "../../utils/constants";
 import { Link, useLocation } from "react-router-dom";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Orders = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const token = (): string | null => {
     const tokenString = localStorage.getItem("accessToken");
@@ -32,7 +32,7 @@ const Orders = () => {
 
   const location = useLocation();
 
-  const { orders } = useTypedSelector((state) => state.historyOrders);
+  const { orders } = useAppSelector((state) => state.historyOrders);
 
   if (orders.length === 0) {
     return (

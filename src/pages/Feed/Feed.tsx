@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import styles from "./feed.module.css";
 import Order from "../../components/Order/Order";
-import { useDispatch } from "react-redux";
 import { connect, disconnect } from "../../services/actions/feed";
 import { wsUrl } from "../../utils/constants";
 import { Link, useLocation } from "react-router-dom";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 import { TOrder } from "../../types/types";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Feed = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(connect(`${wsUrl}/all`));
@@ -20,7 +20,7 @@ const Feed = () => {
 
   const location = useLocation();
 
-  const { orders, total, totalToday } = useTypedSelector((state) => state.feed);
+  const { orders, total, totalToday } = useAppSelector((state) => state.feed);
 
   if (orders.length === 0) {
     return (

@@ -1,4 +1,10 @@
-import { useEffect, useState, ChangeEvent, Dispatch } from "react";
+import {
+  useEffect,
+  useState,
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import styles from "./profiledata.module.css";
 import {
   Input,
@@ -6,15 +12,15 @@ import {
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import { getProfile } from "../../services/actions/profile";
 import { patchProfile } from "../../services/actions/profile";
 import { RootState } from "../../services/reducers";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const ProfileData = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [name, setName] = useState<string>("");
   const [login, setLogin] = useState<string>("");
@@ -29,7 +35,7 @@ const ProfileData = () => {
 
   const userProfile = createSelector([getUser], (profile) => profile.user);
 
-  const user = useTypedSelector(userProfile);
+  const user = useAppSelector(userProfile);
 
   useEffect(() => {
     if (user) {
@@ -38,10 +44,12 @@ const ProfileData = () => {
     }
   }, [user]);
 
-  const handleInputChange = (setter: Dispatch<React.SetStateAction<string>>) => (e: ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value);
-    setIsChanged(true);
-  };
+  const handleInputChange =
+    (setter: Dispatch<SetStateAction<string>>) =>
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+      setIsChanged(true);
+    };
 
   const submitSave = () => {
     dispatch(patchProfile(name, login, pass));

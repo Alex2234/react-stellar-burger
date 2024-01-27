@@ -12,15 +12,15 @@ import IngredientDetails from "../ingredientDetails/ingredient-detail";
 import Feed from "../../pages/Feed/Feed";
 import OrderInfo from "../OrderInfo/OrderInfo";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { checkUserAuth } from "../../services/actions/profile";
 import { OnlyAuth, OnlyUnAuth } from "../ProtectedRoute/ProtectedRouteElement";
 import { getIngredients } from "../../services/actions/ingredients";
 import Modal from "../modal/modal";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state;

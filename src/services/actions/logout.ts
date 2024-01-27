@@ -1,6 +1,8 @@
 import { fetchPostLogoutRequest } from "../../utils/postLogout";
 import { TLogout } from "../../types/types";
 import { Dispatch } from "redux";
+import { RootState } from "../reducers";
+import { ThunkAction } from "redux-thunk";
 
 export const POST_LOGOUT_REQUEST: "POST_LOGOUT_REQUEST" = "POST_LOGOUT_REQUEST";
 export const POST_LOGOUT_SUCCESS: "POST_LOGOUT_SUCCESS" = "POST_LOGOUT_SUCCESS";
@@ -24,7 +26,14 @@ export type TLogoutActions =
   | PostLogoutSuccess
   | PostLogoutFailed;
 
-export const postLogout = () => {
+  type ThunkResult<R = void> = ThunkAction<
+  R,
+  RootState,
+  undefined,
+  TLogoutActions
+>;
+
+export const postLogout = (): ThunkResult => {
   return function (dispatch: Dispatch<TLogoutActions>) {
     dispatch({
       type: POST_LOGOUT_REQUEST,

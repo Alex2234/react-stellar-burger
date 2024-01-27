@@ -2,8 +2,9 @@ import { getProfileRequest } from "../../utils/getProfile";
 import { patchProfileRequest } from "../../utils/patchProfile";
 import { TUser, TProfile } from "../../types/types";
 import { Dispatch } from "redux";
-import { ThunkDispatch } from 'redux-thunk';
+import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../reducers";
+import { ThunkAction } from "redux-thunk";
 
 export const GET_PROFILE_REQUEST: "GET_PROFILE_REQUEST" = "GET_PROFILE_REQUEST";
 export const GET_PROFILE_FAILED: "GET_PROFILE_FAILED" = "GET_PROFILE_FAILED";
@@ -56,6 +57,13 @@ export type TProfileActions =
   | PatchProfileSuccess
   | PatchProfileFailed;
 
+type ThunkResult<R = void> = ThunkAction<
+  R,
+  RootState,
+  undefined,
+  TProfileActions
+>;
+
 export const setAuthChecked = (value: boolean): SetAuthChecked => ({
   type: SET_AUTH_CHECKED,
   payload: value,
@@ -66,7 +74,7 @@ export const setUser = (user: TUser | null): SetUser => ({
   user: user,
 });
 
-export const getProfile = () => {
+export const getProfile = (): ThunkResult<Promise<void>> => {
   return function (dispatch: Dispatch<TProfileActions>) {
     dispatch({ type: GET_PROFILE_REQUEST });
     return getProfileRequest()
@@ -95,7 +103,11 @@ export const checkUserAuth = () => {
   };
 };
 
-export const patchProfile = (name: string, login: string, pass: string) => {
+export const patchProfile = (
+  name: string,
+  login: string,
+  pass: string
+): ThunkResult => {
   return function (dispatch: Dispatch<TProfileActions>) {
     dispatch({
       type: PATCH_PROFILE_REQUEST,

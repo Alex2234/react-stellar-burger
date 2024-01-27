@@ -1,6 +1,8 @@
 import { fetchHttpsOrderRequest } from "../../utils/httpsGetOrder";
 import { TOrder } from "../../types/types";
 import { Dispatch } from "redux";
+import { RootState } from "../reducers";
+import { ThunkAction } from "redux-thunk";
 
 export const GET_HTTPS_ORDER_REQUEST: "GET_HTTPS_ORDER_REQUEST" =
   "GET_HTTPS_ORDER_REQUEST";
@@ -78,6 +80,13 @@ export type TFeedActions =
   | GetHttpsOrderSuccess
   | GetHttpsOrderFailed;
 
+type ThunkResult<R = void> = ThunkAction<
+  R,
+  RootState,
+  undefined,
+  TFeedActions
+>;
+
 export const connect = (url: string) => ({
   type: FEED_CONNECT,
   payload: url,
@@ -87,7 +96,7 @@ export const disconnect = () => ({
   type: FEED_DISCONNECT,
 });
 
-export const getHttpsOrder = (number: number) => {
+export const getHttpsOrder = (number: number): ThunkResult => {
   return function (dispatch: Dispatch<TFeedActions>) {
     dispatch({
       type: GET_HTTPS_ORDER_REQUEST,

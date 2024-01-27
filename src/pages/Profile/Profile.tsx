@@ -1,14 +1,14 @@
 import styles from "./profile.module.css";
 import { NavLink, Outlet, Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { postLogout } from "../../services/actions/logout";
 import { useLocation } from "react-router-dom";
 import { RootState } from "../../services/reducers";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Profile = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const location = useLocation();
 
@@ -16,7 +16,7 @@ const Profile = () => {
 
   const getLogout = createSelector([getDataLogout], (logout) => logout.logout);
 
-  const resLogout = useTypedSelector(getLogout);
+  const resLogout = useAppSelector(getLogout);
 
   if (resLogout) {
     if (resLogout.success) {

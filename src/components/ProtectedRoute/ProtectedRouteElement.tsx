@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
 
 type TProtected = {
   onlyUnAuth?: boolean;
@@ -8,8 +8,8 @@ type TProtected = {
 }
 
 const Protected = ({ onlyUnAuth = false, component }: TProtected) => {
-  const isAuthChecked = useTypedSelector((state) => state.profile.isAuthChecked);
-  const user = useTypedSelector((state) => state.profile.user);
+  const isAuthChecked = useAppSelector((state) => state.profile.isAuthChecked);
+  const user = useAppSelector((state) => state.profile.user);
   const location = useLocation();
 
   if (!isAuthChecked) {

@@ -9,7 +9,7 @@ import DragIngredient from "./dragIngredient-constructor/dragIngredientConstruct
 import Modal from "../modal/modal";
 import OrderDetails from "../OrderDetails/order-details";
 import { postOrder } from "../../services/actions/order";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { createSelector } from "reselect";
 import {
   deleteIngredient,
@@ -19,14 +19,17 @@ import { useDrop } from "react-dnd";
 import update from "immutability-helper";
 import { RootState } from "../../services/reducers";
 import { TIngredient } from "../../types/types";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { useNavigate, useLocation } from "react-router-dom";
 
 type TIngredientConstructor = {
   key: string;
 } & TIngredient;
 
 const BurgerConstructor = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const getBurgerConstructorState = (state: RootState) =>
     state.burgerConstructor;
@@ -47,9 +50,11 @@ const BurgerConstructor = () => {
     (order) => order.orderId
   );
 
-  const bun = useTypedSelector(selectBun);
-  const selectedIngredients = useTypedSelector(selectSelectedIngredients);
-  const orderId = useTypedSelector(selectOrderId);
+  const bun = useAppSelector(selectBun);
+  const selectedIngredients = useAppSelector(selectSelectedIngredients);
+  const orderId = useAppSelector(selectOrderId);
+
+  const user = useAppSelector((state) => state.profile.user);
 
   const orderBurger = useMemo(() => {
     return [...selectedIngredients, bun].filter(
@@ -72,9 +77,20 @@ const BurgerConstructor = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  // const openModal = (ingredients: TIngredient[]) => {
+  //   setModalOpen(true);
+  //   dispatch(postOrder(ingredients));
+  // };
+
   const openModal = (ingredients: TIngredient[]) => {
-    setModalOpen(true);
-    dispatch(postOrder(ingredients));
+    // Проверяем, авторизован ли пользователь
+    if (user) {
+      setModalOpen(true);
+      dispatch(postOrder(ingredients));
+    } else {
+      // Если пользователь не авторизован, перенаправляем на страницу входа
+      navigate('/login', { state: { from: location } });
+    }
   };
 
   const closeModal = () => {

@@ -1,4 +1,12 @@
-import { applyMiddleware, createStore, compose, Store, Middleware, StoreEnhancer } from "redux";
+import {
+  applyMiddleware,
+  createStore,
+  Store,
+  Middleware,
+  StoreEnhancer,
+Action
+} from "redux";
+import { ThunkDispatch } from 'redux-thunk';
 import { composeWithDevTools } from "redux-devtools-extension";
 import { rootReducer } from "./reducers/index";
 import thunk from "redux-thunk";
@@ -32,7 +40,7 @@ const feedMiddleware: Middleware = socketMiddleware({
   onClose: FEED_WS_CLOSE,
   onError: FEED_WS_ERROR,
   onMessage: FEED_WS_MESSAGE,
-  wsSendMessage: ""
+  wsSendMessage: "",
 });
 
 const historyOrdersMiddleware: Middleware = socketMiddleware({
@@ -43,7 +51,7 @@ const historyOrdersMiddleware: Middleware = socketMiddleware({
   onClose: HISTORY_ORDERS_WS_CLOSE,
   onError: HISTORY_ORDERS_WS_ERROR,
   onMessage: HISTORY_ORDERS_WS_MESSAGE,
-  wsSendMessage: ""
+  wsSendMessage: "",
 });
 
 const enhancer: StoreEnhancer = composeWithDevTools(
@@ -51,5 +59,7 @@ const enhancer: StoreEnhancer = composeWithDevTools(
 );
 
 const store: Store<RootState> = createStore(rootReducer, enhancer);
+
+export type AppDispatch = ThunkDispatch<RootState, any, Action>;
 
 export default store;

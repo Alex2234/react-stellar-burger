@@ -18,7 +18,7 @@ export type TIngredientsAction = AddIngredientAction | DeleteIngredientAction;
 
 export const addIngredient = (
   selectIngredient: TIngredient
-): AddIngredientAction => {
+) => {
   return {
     type: ADD_INGREDIENTS,
     selectIngredient: {
@@ -28,7 +28,7 @@ export const addIngredient = (
   };
 };
 
-export const deleteIngredient = (key: string): DeleteIngredientAction => {
+export const deleteIngredient = (key: string) => {
   return {
     type: DELETE_INGREDIENT,
     key: key,
