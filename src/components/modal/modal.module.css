@@ -24,12 +24,16 @@
 }
 
 .head {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .icon {
+  position: absolute;
+  top: -20px;
+  right: -60px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }

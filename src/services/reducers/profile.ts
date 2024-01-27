@@ -1,0 +1,85 @@
+import {
+    GET_PROFILE_REQUEST,
+    GET_PROFILE_FAILED,
+    SET_AUTH_CHECKED,
+    SET_USER,
+    PATCH_PROFILE_REQUEST,
+    PATCH_PROFILE_SUCCESS,
+    PATCH_PROFILE_FAILED
+  } from "../actions/profile";
+  import { TUser, TProfile } from "../../types/types";
+  import {TProfileActions} from "../actions/profile";
+
+  type TOrderState = {
+    user: TUser | null;
+    dataProfile: TProfile | null;
+    profileRequest: boolean;
+    profileFailed: boolean;
+    isAuthChecked: boolean;
+  }
+  
+  const initialState: TOrderState = {
+    user: null,
+    dataProfile: null,
+    profileRequest: false,
+    profileFailed: false,
+    isAuthChecked: false
+  };
+
+
+  export const profileReducer = (state = initialState, action: TProfileActions) => {
+    switch (action.type) {
+      case GET_PROFILE_REQUEST: {
+        return {
+          ...state,
+          profileRequest: true,
+        };
+      }
+      case GET_PROFILE_FAILED: {
+        return {
+          ...state,
+          profileFailed: true,
+          profileRequest: false,
+          user: null
+        };
+      }
+      case SET_AUTH_CHECKED: {
+        return {
+          ...state,
+          isAuthChecked: action.payload
+        }
+      }
+      case SET_USER: {
+        return {
+          ...state,
+          user: action.user,
+        };
+      }
+      case PATCH_PROFILE_REQUEST: {
+        return {
+          ...state,
+          profileRequest: true,
+          dataProfile: null
+        };
+      }
+      case PATCH_PROFILE_SUCCESS: {
+        return {
+          ...state,
+          profileRequest: false,
+          dataProfile: action.dataProfile
+        };
+      }
+      case PATCH_PROFILE_FAILED: {
+        return {
+          ...state,
+          profileFailed: true,
+          profileRequest: false,
+          dataProfile: null
+        };
+      }
+      default: {
+        return state;
+      }
+    }
+  };
+  
